@@ -1,0 +1,13 @@
+.DS_Store
+
+.dev.env
+.env
+
+.vscode/
+
+__pycache__/
+.pytest_cache/
+
+.serverless/
+
+node_modules

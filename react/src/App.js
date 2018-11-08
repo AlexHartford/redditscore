@@ -10,6 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Fade from '@material-ui/core/Fade';
+import axios from 'axios'
 
 const theme = createMuiTheme({
   palette: {
@@ -44,16 +45,29 @@ class App extends Component {
     this.predict = this.predict.bind(this);
     this.handleInput = this.handleInput.bind(this);
   }
-  
+
   predict() {
+    var headers = {
+      "Access-Control-Allow-Origin": "*",
+      "crossDomain": true
+    }
+
     this.setState({score: ''});
     this.setState({loading: true}, () => {
-      setTimeout(() => {
-        this.setState({score: Math.floor(Math.random() * 300) - 100})
-      this.setState({loading: false});
-      }, 1500);
-    });
-  };
+      // axios.post('https://wa7wwh2jb9.execute-api.us-east-2.amazonaws.com/dev/predict',
+      axios.post('http://localhost:5000/predict',
+      {
+        comment: this.state.input}, headers)
+        .then((response) => {
+          this.setState({score: response['data']});
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+        this.setState({loading: false});
+      });
+    };
+
 
   renderResult() {
     if (this.state.score !== '') {
@@ -101,7 +115,7 @@ class App extends Component {
             <Fade
               in={this.state.loading}
               style={{
-                transitionDelay: this.state.loading ? '600ms' : '0ms',
+                transitionDelay: this.state.loading ? '200ms' : '0ms',
               }}
               unmountOnExit
             >
