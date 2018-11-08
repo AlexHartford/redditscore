@@ -1,0 +1,12 @@
+==> 2018-10-03 10:47:25 <==
+# cmd: C:\Users\Fresh\Anaconda3\Scripts\conda create --prefix=venv python=3.6
+# conda version: 4.5.11
++defaults::certifi-2018.8.24-py36_1
++defaults::pip-10.0.1-py36_0
++defaults::python-3.6.6-hea74fb7_0
++defaults::setuptools-40.2.0-py36_0
++defaults::vc-14.1-h0510ff6_4
++defaults::vs2015_runtime-14.15.26706-h3a45250_0
++defaults::wheel-0.31.1-py36_0
++defaults::wincertstore-0.2-py36h7fe50ca_0
+# update specs: ['python=3.6']
