@@ -54,8 +54,7 @@ class App extends Component {
 
     this.setState({score: ''});
     this.setState({loading: true}, () => {
-      // axios.post('https://wa7wwh2jb9.execute-api.us-east-2.amazonaws.com/dev/predict',
-      axios.post('http://localhost:5000/predict',
+      axios.post('http://flask-env.cyyavckw2y.us-east-2.elasticbeanstalk.com/predict',
       {
         comment: this.state.input}, headers)
         .then((response) => {
