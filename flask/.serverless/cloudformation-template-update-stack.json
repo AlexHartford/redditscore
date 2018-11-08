@@ -8,7 +8,7 @@
     "AppLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/redditscore-ml-dev-app"
+        "LogGroupName": "/aws/lambda/redditscoreml-dev-app"
       }
     },
     "IamRoleLambdaExecution": {
@@ -37,7 +37,7 @@
                 "-",
                 [
                   "dev",
-                  "redditscore-ml",
+                  "redditscoreml",
                   "lambda"
                 ]
               ]
@@ -52,7 +52,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/redditscore-ml-dev-app:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/redditscoreml-dev-app:*"
                     }
                   ]
                 },
@@ -63,7 +63,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/redditscore-ml-dev-app:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/redditscoreml-dev-app:*:*"
                     }
                   ]
                 }
@@ -76,7 +76,7 @@
           "Fn::Join": [
             "-",
             [
-              "redditscore-ml",
+              "redditscoreml",
               "dev",
               "us-east-2",
               "lambdaRole"
@@ -92,9 +92,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/redditscore-ml/dev/1541644702576-2018-11-08T02:38:22.576Z/redditscore-ml.zip"
+          "S3Key": "serverless/redditscoreml/dev/1541657657264-2018-11-08T06:14:17.264Z/redditscoreml.zip"
         },
-        "FunctionName": "redditscore-ml-dev-app",
+        "FunctionName": "redditscoreml-dev-app",
         "Handler": "wsgi.handler",
         "MemorySize": 1024,
         "Role": {
@@ -111,20 +111,20 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "AppLambdaVersionQewxU6fnFYbehntpYgQ5hk5vzUKML2Ws2oEifSa3Q": {
+    "AppLambdaVersionjX3ebnsUfkJ6v9LLopnQMUJ6c5qpDgemWfhE4DK1i8Y": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AppLambdaFunction"
         },
-        "CodeSha256": "s8zdsPYWIv2pXeqZKd8NW3Ym/hQX5jt/6OED06Pdr1g="
+        "CodeSha256": "8QbKQRJ1eZkRwQ7M4eamL1d3kIdzH1pQgvmd/bdiMls="
       }
     },
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "dev-redditscore-ml",
+        "Name": "dev-redditscoreml",
         "EndpointConfiguration": {
           "Types": [
             "EDGE"
@@ -132,16 +132,75 @@
         }
       }
     },
-    "ApiGatewayMethodAny": {
-      "Type": "AWS::ApiGateway::Method",
+    "ApiGatewayResourcePredict": {
+      "Type": "AWS::ApiGateway::Resource",
       "Properties": {
-        "HttpMethod": "ANY",
-        "RequestParameters": {},
-        "ResourceId": {
+        "ParentId": {
           "Fn::GetAtt": [
             "ApiGatewayRestApi",
             "RootResourceId"
           ]
+        },
+        "PathPart": "predict",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodPredictOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Credentials": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+                "method.response.header.Access-Control-Allow-Credentials": "'false'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourcePredict"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodPredictPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourcePredict"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
@@ -178,7 +237,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1541644702855": {
+    "ApiGatewayDeployment1541657657524": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -187,7 +246,8 @@
         "StageName": "dev"
       },
       "DependsOn": [
-        "ApiGatewayMethodAny"
+        "ApiGatewayMethodPredictOptions",
+        "ApiGatewayMethodPredictPost"
       ]
     },
     "AppLambdaPermissionApiGateway": {
@@ -247,7 +307,7 @@
     "AppLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AppLambdaVersionQewxU6fnFYbehntpYgQ5hk5vzUKML2Ws2oEifSa3Q"
+        "Ref": "AppLambdaVersionjX3ebnsUfkJ6v9LLopnQMUJ6c5qpDgemWfhE4DK1i8Y"
       }
     },
     "ServiceEndpoint": {

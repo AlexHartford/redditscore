@@ -4,5 +4,6 @@ Jinja2==2.10
 MarkupSafe==1.0
 Werkzeug==0.14.1
 certifi==2018.8.24
+flask-cors==3.0.6
 itsdangerous==0.24
 wincertstore==0.2

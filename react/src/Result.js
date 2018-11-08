@@ -16,7 +16,7 @@ const styles = {
 };
 
 function displayScore(score) {
-  if (score < 0) 
+  if (score <= 0) 
   {
     return (
       <div>
@@ -26,7 +26,7 @@ function displayScore(score) {
       </div>
     );
   } 
-  else if (score > 0) 
+  else if (score > 1) 
   {
     return (
       <div>
